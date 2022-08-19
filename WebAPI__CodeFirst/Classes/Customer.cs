@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace WebAPI__CodeFirst.Model
+namespace WebAPI__CodeFirst.Classes
 {
     public class Customer
     {

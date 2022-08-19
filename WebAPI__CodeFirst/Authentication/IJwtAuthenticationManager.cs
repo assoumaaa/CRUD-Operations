@@ -1,4 +1,6 @@
-﻿namespace WebAPI__CodeFirst.Authentication
+﻿using WebAPI__CodeFirst.Model;
+
+namespace WebAPI__CodeFirst.Authentication
 {
     public interface IJwtAuthenticationManager
     {

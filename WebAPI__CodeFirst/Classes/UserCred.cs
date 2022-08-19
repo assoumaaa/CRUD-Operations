@@ -1,4 +1,4 @@
-﻿namespace WebAPI__CodeFirst.Authentication
+﻿namespace WebAPI__CodeFirst.Classes
 {
     public class UserCred
     {

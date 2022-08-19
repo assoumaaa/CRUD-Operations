@@ -1,7 +1,8 @@
 ﻿using System.Net.Http;
+using System.Net.Http.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using WebAPI__CodeFirst.Model;
+using WebAPI__CodeFirst.Classes;
 
 namespace WebAPI__CodeFirst.Controllers
 {

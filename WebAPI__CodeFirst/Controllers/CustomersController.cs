@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using WebAPI__CodeFirst.Authentication;
-using WebAPI__CodeFirst.Model;
+using WebAPI__CodeFirst.Classes;
+using WebAPI__CodeFirst.Repos;
 
 namespace WebAPI__CodeFirst.Controllers
 {
@@ -12,61 +14,45 @@ namespace WebAPI__CodeFirst.Controllers
     [Route("api/customers")]
     public class CustomersController : Controller
     {
-        private readonly DataContext _context;
-
-        public CustomersController(DataContext context)
+        private readonly ICustomerRepository _customerRepo;   
+        public CustomersController(ICustomerRepository customerRepo)
         {
-            _context = context;
+            _customerRepo = customerRepo;
         }
 
+
         [HttpGet]
-        public IEnumerable<Customer> GetAll()
+        public async Task<List<Customer>> GetAllCustomersAsync()
         {
-            return _context.Customers.ToList();
+            return await _customerRepo.GetAllCustomersAsync();
         }
 
 
         [HttpGet("{id}")]
         public Customer GetById(int id)
-        {      
-            var list = _context.Customers.ToList();
-            return list.Find(cs => cs.customer_ID == id);   
-        }
-
-
-        [HttpPost]
-        public Customer AddCustomer([FromBody] Customer newCustomer)
         {
-            if (newCustomer == null) return null;
-            else
-            {
-                _context.Customers.Add(newCustomer);
-                _context.SaveChanges();
-                return newCustomer;
-            } 
+            return _customerRepo.GetCustomerByID(id);
         }
+
+
+        [HttpPost]  
+        public async Task<Customer> AddCustomerAsync([FromBody] Customer newCustomer)
+        {
+            return await _customerRepo.AddCustomerAsync(newCustomer);
+        } 
+
 
         [HttpPut("{id}")]
         public Customer UpdateCustomer(int id, [FromBody] Customer value)
-        {         
-            List<Customer> list = _context.Customers.ToList();
-            Customer toUpdate = list.Find(cs => cs.customer_ID == id);
-            toUpdate.firstName = value.firstName;
-            toUpdate.lastName = value.lastName;
-
-            _context.SaveChanges();
-            return toUpdate;     
+        {
+            return _customerRepo.UpdateCustomer(id, value);
         }
 
 
         [HttpDelete("{id}")]
-        public Customer DeleteCustomer(int id)
-        {       
-            List<Customer> list = _context.Customers.ToList();
-            Customer toDelete = list.Find(cs => cs.customer_ID == id);
-            _context.Customers.Remove(toDelete);
-            _context.SaveChanges();
-            return toDelete;    
+        public async Task<Customer> DeleteCustomerAsync(int id)
+        {
+            return await _customerRepo.DeleteCustomerAsync(id);
         }
     }
 }

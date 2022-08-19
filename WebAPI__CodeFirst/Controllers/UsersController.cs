@@ -1,10 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Threading.Tasks;
 using WebAPI__CodeFirst.Authentication;
-using WebAPI__CodeFirst.Model;
+using WebAPI__CodeFirst.Classes;
 
 namespace WebAPI__CodeFirst.Controllers
 

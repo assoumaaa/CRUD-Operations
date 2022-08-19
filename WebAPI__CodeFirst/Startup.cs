@@ -13,6 +13,7 @@ using WebAPI__CodeFirst.Authentication;
 using WebAPI__CodeFirst.Model;
 using Serilog;
 using Microsoft.AspNetCore.Identity;
+using WebAPI__CodeFirst.Repos;
 
 namespace WebAPI__CodeFirst
 {
@@ -43,6 +44,7 @@ namespace WebAPI__CodeFirst
 
             var key = "This is my test key that i am trying out!";
             services.AddSingleton<IJwtAuthenticationManager>(new JwtAuthenticationManager(key));
+            services.AddScoped<ICustomerRepository, CustomerRepository>();
             services.AddAuthentication(x =>
             {
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

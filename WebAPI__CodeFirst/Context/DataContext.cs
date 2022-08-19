@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using WebAPI__CodeFirst.Classes;
 
 namespace WebAPI__CodeFirst.Model
 {
