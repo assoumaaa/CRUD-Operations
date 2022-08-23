@@ -11,8 +11,8 @@ using WebAPI__CodeFirst.Model;
 namespace WebAPI__CodeFirst.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20220804061654_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20220819135758_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

@@ -4,7 +4,7 @@
 
 namespace WebAPI__CodeFirst.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

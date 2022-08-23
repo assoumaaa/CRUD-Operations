@@ -29,8 +29,11 @@ namespace WebAPI__CodeFirst
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddCors();
+
             services.AddMvc();
+
             services.AddHttpClient();
+
             services.AddHttpClient("covid",c =>
             {
                 c.BaseAddress = new Uri("https://api.covid19api.com/");
@@ -38,17 +41,29 @@ namespace WebAPI__CodeFirst
 
 
             services.AddDbContext<DataContext>(opts => opts.UseSqlServer(Configuration["Data:ConnectionStrings:DefaultConnection"]));
+
             services.AddDbContext<UserIdentityContext>(opts => opts.UseSqlServer(Configuration["Data:ConnectionStrings:DefaultConnection"]));
+
             services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<UserIdentityContext>();
 
-
             var key = "This is my test key that i am trying out!";
+
             services.AddSingleton<IJwtAuthenticationManager>(new JwtAuthenticationManager(key));
+
             services.AddScoped<ICustomerRepository, CustomerRepository>();
+
+            services.AddStackExchangeRedisCache(options =>
+            {
+                options.Configuration = Configuration.GetConnectionString("Redis");
+                options.InstanceName = "Customers";
+            });
+
+
             services.AddAuthentication(x =>
             {
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+
             }).AddJwtBearer(x =>
             {
                 x.RequireHttpsMetadata = false;
@@ -76,6 +91,7 @@ namespace WebAPI__CodeFirst
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -93,6 +109,10 @@ namespace WebAPI__CodeFirst
             app.UseSerilogRequestLogging();
 
             app.UseRouting();
+
+            app.UseCors(
+                 options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()
+            );
 
             app.UseAuthentication();
 

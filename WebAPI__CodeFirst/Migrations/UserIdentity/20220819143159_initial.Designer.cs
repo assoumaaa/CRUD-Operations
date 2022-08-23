@@ -12,8 +12,8 @@ using WebAPI__CodeFirst.Model;
 namespace WebAPI__CodeFirst.Migrations.UserIdentity
 {
     [DbContext(typeof(UserIdentityContext))]
-    [Migration("20220810080228_identityUser")]
-    partial class identityUser
+    [Migration("20220819143159_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

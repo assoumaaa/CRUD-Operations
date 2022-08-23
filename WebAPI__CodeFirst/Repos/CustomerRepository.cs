@@ -1,21 +1,28 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Caching.Memory;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WebAPI__CodeFirst.Classes;
 using WebAPI__CodeFirst.Model;
+using WebAPI__CodeFirst.Redis;
 
 namespace WebAPI__CodeFirst.Repos
 {
     public class CustomerRepository : ICustomerRepository
     {
         private readonly DataContext _context;
+        private readonly IDistributedCache _cache;
+        
 
-        public CustomerRepository(DataContext context)
+        public CustomerRepository(DataContext context,IDistributedCache cache)
         {
             _context = context;
+            _cache = cache;
         }
+
 
         public async Task<List<Customer>> GetAllCustomersAsync()
         {

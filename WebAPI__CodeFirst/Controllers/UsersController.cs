@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -8,8 +9,8 @@ using WebAPI__CodeFirst.Classes;
 namespace WebAPI__CodeFirst.Controllers
 
 {
+    
     [Route("users")]
-
     public class UsersController : Controller
     {
         private readonly IJwtAuthenticationManager _jwtAuthenticationManager;
@@ -26,7 +27,7 @@ namespace WebAPI__CodeFirst.Controllers
             _jwtAuthenticationManager = jwtAuthenticationManager;
         }
 
-
+        
         [HttpPost]
         [AllowAnonymous]
         [Route("register")]
