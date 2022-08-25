@@ -39,8 +39,14 @@
     <None Remove="Microsoft.Extensions.Caching.StackExchangeRedis" />
     <None Remove="StackExchange.Redis" />
     <None Remove="Redis\" />
+    <None Remove="Repos\CustomerRepo\" />
+    <None Remove="Repos\CovidRepo\" />
+    <None Remove="Repos\UserRepo\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Redis\" />
+    <Folder Include="Repos\CustomerRepo\" />
+    <Folder Include="Repos\CovidRepo\" />
+    <Folder Include="Repos\UserRepo\" />
   </ItemGroup>
 </Project>

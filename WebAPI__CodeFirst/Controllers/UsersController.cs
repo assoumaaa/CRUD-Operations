@@ -5,47 +5,17 @@ using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using WebAPI__CodeFirst.Authentication;
 using WebAPI__CodeFirst.Classes;
+using WebAPI__CodeFirst.Repos.UserRepo;
 
 namespace WebAPI__CodeFirst.Controllers
-
 {
-    
     [Route("users")]
     public class UsersController : Controller
     {
-        private readonly IJwtAuthenticationManager _jwtAuthenticationManager;
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly SignInManager<IdentityUser> _signInManager;
-       
-
-        public UsersController(UserManager<IdentityUser> userManager,
-             SignInManager<IdentityUser> signInManager,
-             IJwtAuthenticationManager jwtAuthenticationManager)
+        private readonly IUserRepository _userRepository;
+        public UsersController(IUserRepository userRepository)
         {
-            _userManager = userManager;
-            _signInManager = signInManager;
-            _jwtAuthenticationManager = jwtAuthenticationManager;
-        }
-
-        
-        [HttpPost]
-        [AllowAnonymous]
-        [Route("register")]
-        public async Task<UserCred> Register([FromBody]UserCred user)
-        {
-            var newUser = new IdentityUser
-            {
-                UserName = user.username,
-                PasswordHash = user.password,
-            };
-
-            var result = await _userManager.CreateAsync(newUser, user.password);
-
-            if (result.Succeeded)
-            {
-                await _signInManager.SignInAsync(newUser, isPersistent: false);
-            }
-            return user;
+            _userRepository = userRepository;
         }
 
 
@@ -53,16 +23,18 @@ namespace WebAPI__CodeFirst.Controllers
         [AllowAnonymous]
         [Route("login")]
         public async Task<IActionResult> Login([FromBody] UserCred user)
-        {          
-            var result = await _signInManager.PasswordSignInAsync(user.username, user.password, user.rememberMe, false);
+        {
+            var token = await _userRepository.LoginAsync(user);
+            return token == null ? Unauthorized() : Ok(token);
+        }
 
-            if (result.Succeeded)
-            {
-                var token = _jwtAuthenticationManager.Authenticate(user.username, user.password);
-                if (token == null) return Unauthorized();
-                return Ok(token);
-            }
-            return BadRequest();
+
+        [HttpPost]
+        [AllowAnonymous]
+        [Route("register")]
+        public async Task<UserCred> Register([FromBody] UserCred user)
+        {
+            return await _userRepository.RegisterAsync(user);
         }
     }
 }

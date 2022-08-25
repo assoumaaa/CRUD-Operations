@@ -13,6 +13,7 @@ using WebAPI__CodeFirst.Authentication;
 using WebAPI__CodeFirst.Classes;
 using WebAPI__CodeFirst.Model;
 using WebAPI__CodeFirst.Redis;
+using WebAPI__CodeFirst.Repos.CovidRepo;
 
 namespace WebAPI__CodeFirst.Controllers
 {
@@ -20,63 +21,30 @@ namespace WebAPI__CodeFirst.Controllers
     [Route("api/covid")]
     public class CovidController : Controller
     {
-        private readonly IHttpClientFactory _httpClientFactory;
-        private readonly IDistributedCache _cache;
+        private readonly ICovidRepository _covidRepository;
 
-        public CovidController(IHttpClientFactory httpClientFactory, IDistributedCache cache)
+        public CovidController(ICovidRepository covidRepository)
         {
-            _httpClientFactory = httpClientFactory;
-            _cache = cache;
+            _covidRepository = covidRepository;
         }
 
         [HttpGet]
-        public async Task<String> GetSummary()
+        public async Task<String> GetSummaryAsync()
         {
-            var httpClient = _httpClientFactory.CreateClient("covid");
-            var response = await httpClient.GetAsync("summary");
-            return await response.Content.ReadAsStringAsync();
+            return await _covidRepository.GetSummaryAsync();
         }
 
         [HttpGet("GetAllCountries")]
-        public async Task<String> GetAllCountries()
+        public async Task<String> GetAllCountriesAsync()
         {
-            string recordKey = "Countries_getAll";
-            var cachedContries = await _cache.GetRecordAsync<String>(recordKey);
-
-            if (cachedContries is null)
-            {
-                var httpClient = _httpClientFactory.CreateClient("covid");
-
-                var response = await httpClient.GetAsync("countries");
-
-                var resposneString = await response.Content.ReadAsStringAsync();
-
-                await _cache.SetRecordAsync(recordKey, resposneString);
-
-                Console.Write("LOADED FROM API!\n");
-
-                return resposneString;
-            }
-            else
-            {
-                Console.Write("LOADED FROM CACHE!\n");
-
-                return cachedContries;
-            }
+            return await _covidRepository.GetAllCountriesAsync();
         }
 
         [HttpGet("countries/{country}")]
-        public async Task<String> GetByCountry(string country)
+        public async Task<String> GetByCountryAsync(string country)
         {
-            var httpClient = _httpClientFactory.CreateClient("covid");
-            var response = await httpClient.GetAsync($"country/{country}");
-            return await response.Content.ReadAsStringAsync();
+            return await _covidRepository.GetByCountryAsync(country);
         }
     }
 }
 
-
-
-/*
-       
-*/

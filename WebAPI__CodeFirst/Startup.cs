@@ -1,19 +1,21 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Configuration;
+using WebAPI__CodeFirst.Authentication;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using System;
-using System.Text;
-using WebAPI__CodeFirst.Authentication;
-using WebAPI__CodeFirst.Model;
-using Serilog;
-using Microsoft.AspNetCore.Identity;
 using WebAPI__CodeFirst.Repos;
+using WebAPI__CodeFirst.Model;
+using System.Text;
+using Serilog;
+using System;
+using WebAPI__CodeFirst.Repos.CovidRepo;
+using WebAPI__CodeFirst.Repos.UserRepo;
 
 namespace WebAPI__CodeFirst
 {
@@ -51,6 +53,10 @@ namespace WebAPI__CodeFirst
             services.AddSingleton<IJwtAuthenticationManager>(new JwtAuthenticationManager(key));
 
             services.AddScoped<ICustomerRepository, CustomerRepository>();
+
+            services.AddScoped<ICovidRepository, CovidRepository>();
+
+            services.AddScoped<IUserRepository, UserRepository>();
 
             services.AddStackExchangeRedisCache(options =>
             {

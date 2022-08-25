@@ -14,13 +14,10 @@ namespace WebAPI__CodeFirst.Repos
     public class CustomerRepository : ICustomerRepository
     {
         private readonly DataContext _context;
-        private readonly IDistributedCache _cache;
-        
 
-        public CustomerRepository(DataContext context,IDistributedCache cache)
+        public CustomerRepository(DataContext context)
         {
             _context = context;
-            _cache = cache;
         }
 
 
