@@ -35,8 +35,6 @@ namespace WebAPI__CodeFirst.Repos.CovidRepo
 
                 var response = await httpClient.GetAsync("countries");
 
-                Console.WriteLine(response.GetType());
-
                 var resposneString = await response.Content.ReadAsStringAsync();
 
                 await _cache.SetRecordAsync(recordKey, resposneString);

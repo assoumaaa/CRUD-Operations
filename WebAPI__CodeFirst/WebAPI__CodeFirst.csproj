@@ -42,11 +42,17 @@
     <None Remove="Repos\CustomerRepo\" />
     <None Remove="Repos\CovidRepo\" />
     <None Remove="Repos\UserRepo\" />
+    <None Remove="Services\" />
+    <None Remove="Services\Interface\" />
+    <None Remove="Services\Extension\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Redis\" />
     <Folder Include="Repos\CustomerRepo\" />
     <Folder Include="Repos\CovidRepo\" />
     <Folder Include="Repos\UserRepo\" />
+    <Folder Include="Services\" />
+    <Folder Include="Services\Interface\" />
+    <Folder Include="Services\Extension\" />
   </ItemGroup>
 </Project>

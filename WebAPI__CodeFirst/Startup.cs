@@ -16,6 +16,7 @@ using Serilog;
 using System;
 using WebAPI__CodeFirst.Repos.CovidRepo;
 using WebAPI__CodeFirst.Repos.UserRepo;
+using WebAPI__CodeFirst.Services.Extension;
 
 namespace WebAPI__CodeFirst
 {
@@ -30,69 +31,7 @@ namespace WebAPI__CodeFirst
         
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddCors();
-
-            services.AddMvc();
-
-            services.AddHttpClient();
-
-            services.AddHttpClient("covid",c =>
-            {
-                c.BaseAddress = new Uri("https://api.covid19api.com/");
-            });
-
-
-            services.AddDbContext<DataContext>(opts => opts.UseSqlServer(Configuration["Data:ConnectionStrings:DefaultConnection"]));
-
-            services.AddDbContext<UserIdentityContext>(opts => opts.UseSqlServer(Configuration["Data:ConnectionStrings:DefaultConnection"]));
-
-            services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<UserIdentityContext>();
-
-            var key = "This is my test key that i am trying out!";
-
-            services.AddSingleton<IJwtAuthenticationManager>(new JwtAuthenticationManager(key));
-
-            services.AddScoped<ICustomerRepository, CustomerRepository>();
-
-            services.AddScoped<ICovidRepository, CovidRepository>();
-
-            services.AddScoped<IUserRepository, UserRepository>();
-
-            services.AddStackExchangeRedisCache(options =>
-            {
-                options.Configuration = Configuration.GetConnectionString("Redis");
-                options.InstanceName = "Customers";
-            });
-
-
-            services.AddAuthentication(x =>
-            {
-                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-
-            }).AddJwtBearer(x =>
-            {
-                x.RequireHttpsMetadata = false;
-                x.SaveToken = true;
-                x.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(key)),
-                    ValidateIssuer = false,
-                    ValidateAudience = false,
-                };
-            });
-
-
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo
-                {
-                    Version = "v1",
-                    Title = "Customers Web API",
-                    Description = "Testing my swagger"
-                });
-            });
+            services.GetAllServices(Configuration);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
